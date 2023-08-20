@@ -38,7 +38,7 @@ router.delete('/:id', async (req, res) => {
         res.status(500).json({ message: error.message })
     }
 })
-
+//  update the todos 
 router.patch('/:id', async(req, res)=>{
     const id = req.params.id;
     const updatedTodo = {title: req.body.title, description: req.body.description}
@@ -53,5 +53,17 @@ router.patch('/:id', async(req, res)=>{
     console.log("request in server here is ==>", req)
    }
 })
+//Delete All todos
+router.delete('/', async (req, res) => {
+    try {
+      
+      await Todo.deleteMany({});
+      
+      res.status(204).json({ message: 'All todos deleted successfully' });
+    } catch (error) {
+      console.error('Error deleting all todos:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 module.exports = router
