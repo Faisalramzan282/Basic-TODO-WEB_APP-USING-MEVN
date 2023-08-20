@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const Todo = require('../../models/todoSchema')
 const router = Router()
-router.get('/getData', async (req, res) => {
+router.get('/', async (req, res) => {
      try {
         const todoList = await Todo.find()
         if (!todoList) throw new Error('No Todo List found')
@@ -40,14 +40,17 @@ router.delete('/:id', async (req, res) => {
 })
 
 router.patch('/:id', async(req, res)=>{
-    const {id} = req.params;
+    const id = req.params.id;
+    const updatedTodo = {title: req.body.title, description: req.body.description}
+    console.log("server side ", updatedTodo)
    try{
-    const update = await Todo.findByIdAndUpdate(id);
+    const update = await Todo.findByIdAndUpdate(id, updatedTodo, { new: true })
     if(!update) throw Error("Not update successfully");
     res.status(200).json(update);
    }
    catch(error){
     res.status(500).json({message: error.message});
+    console.log("request in server here is ==>", req)
    }
 })
 
